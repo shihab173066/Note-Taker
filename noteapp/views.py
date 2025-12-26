@@ -3,8 +3,9 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.serializers import Serializer
+
 from .models import *
-# from .serializers import NoteSerializer
+from .serializers import NoteSerializer
 # from api import serializers
 # from .utils import updateNote, getNoteDetail, deleteNote, getNotesList, createNote
 
@@ -46,3 +47,9 @@ def getRoutes(request):
         },
     ]
     return Response(routes)
+
+@api_view(['GET'])
+def getNotes(request):
+    notes = Note.objects.all().order_by('-updated') 
+    serializer = NoteSerializer(notes, many=True)
+    return Response(serializer.data)
