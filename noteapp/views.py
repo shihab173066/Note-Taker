@@ -6,7 +6,7 @@ from rest_framework.serializers import Serializer
 
 from .models import *
 from .serializers import NoteSerializer
-# from api import serializers
+from noteapp import serializers
 # from .utils import updateNote, getNoteDetail, deleteNote, getNotesList, createNote
 
 # Create your views here.
@@ -52,4 +52,11 @@ def getRoutes(request):
 def getNotes(request):
     notes = Note.objects.all().order_by('-updated') 
     serializer = NoteSerializer(notes, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def getNote(request, pk):
+    notes = Note.objects.get(id=pk) 
+    serializer = NoteSerializer(notes)
     return Response(serializer.data)
